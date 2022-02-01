@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Profile;
 import com.qa.meditation_app.data.entity.Meditation;
 import com.qa.meditation_app.data.repository.MeditationRepository;
 
-@Profile("dev")
+@Profile("dev") // only runs on dev profile
 @Configuration
 public class ApplicationStartupListener implements ApplicationListener<ApplicationReadyEvent> {
 
