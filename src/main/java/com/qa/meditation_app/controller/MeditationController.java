@@ -21,9 +21,7 @@ import com.qa.meditation_app.data.entity.Meditation;
 import com.qa.meditation_app.service.MeditationService;
 
 @RestController
-
 @RequestMapping(path = "/meditation")
-
 public class MeditationController {
 
 	private MeditationService meditationService;
