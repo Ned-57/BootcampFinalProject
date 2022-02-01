@@ -31,6 +31,7 @@ public class MeditationControllerWebIntegrationTest {
 
 	// Data for tests
 	private List<Meditation> meds;
+	private Meditation gotMed;
 
 	// Runs before each test
 	@BeforeEach
@@ -41,6 +42,8 @@ public class MeditationControllerWebIntegrationTest {
 		meds.addAll(List.of(new Meditation(LocalDate.of(2022, 01, 31), "10:52", 10, false),
 				new Meditation(LocalDate.of(2022, 02, 01), "09:00", 45, true),
 				new Meditation(LocalDate.of(2022, 02, 02), "14:00", 12, false)));
+		// Meditation object to retrieve by id
+		gotMed = new Meditation(LocalDate.of(2022, 02, 02), "14:00", 12, false);
 
 	}
 
@@ -62,6 +65,25 @@ public class MeditationControllerWebIntegrationTest {
 		// Verifies that the meditationService.getAll method was called by the
 		// controller
 		verify(meditationService).getAll();
+	}
+
+	@Test
+	public void getMeditationByIdTest() {
+		// Expected return
+		ResponseEntity<Meditation> expected = ResponseEntity.status(HttpStatus.OK).body(gotMed);
+		// Mock method & return
+		when(meditationService.getById(3)).thenReturn(gotMed);
+		// Actual method
+		ResponseEntity<Meditation> actual = controller.getMeditationById(3);
+		// Assertion
+		assertThat(expected).isEqualTo(actual);
+		// Verify mock
+		verify(meditationService).getById(3);
+	}
+
+	@Test
+	public void createMeditationTest() {
+
 	}
 
 }
