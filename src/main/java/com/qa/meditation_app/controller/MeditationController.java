@@ -37,7 +37,7 @@ public class MeditationController {
 		return meditations;
 	}
 
-	// get by id
+	// Get by id
 	@GetMapping(path = "/{id}")
 	public ResponseEntity<Meditation> getMeditationById(@PathVariable("id") long id) {
 		Meditation savedMeditation = meditationService.getById(id);
@@ -45,6 +45,7 @@ public class MeditationController {
 		return response;
 	}
 
+	// Create
 	@PostMapping
 	public ResponseEntity<Meditation> createMeditation(@Valid @RequestBody Meditation meditation) {
 		Meditation savedMeditation = meditationService.create(meditation);

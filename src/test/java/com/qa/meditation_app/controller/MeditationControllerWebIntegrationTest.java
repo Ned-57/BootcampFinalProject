@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -32,6 +33,8 @@ public class MeditationControllerWebIntegrationTest {
 	// Data for tests
 	private List<Meditation> meds;
 	private Meditation gotMed;
+	private Meditation newMed;
+	private Meditation createdMed;
 
 	// Runs before each test
 	@BeforeEach
@@ -44,7 +47,10 @@ public class MeditationControllerWebIntegrationTest {
 				new Meditation(LocalDate.of(2022, 02, 02), "14:00", 12, false)));
 		// Meditation object to retrieve by id
 		gotMed = new Meditation(LocalDate.of(2022, 02, 02), "14:00", 12, false);
-
+		// Meditation to be returned upon creation
+		newMed = new Meditation(LocalDate.of(2022, 02, 03), "14:00", 12, false);
+		// Meditation to be created
+		createdMed = new Meditation(LocalDate.of(2022, 02, 03), "14:00", 12, false);
 	}
 
 	@Test
@@ -83,6 +89,19 @@ public class MeditationControllerWebIntegrationTest {
 
 	@Test
 	public void createMeditationTest() {
+		// Create headers to add to expected response entity
+		HttpHeaders headers = new HttpHeaders();
+		headers.add("Location", "/meditation/" + String.valueOf(newMed.getId()));
+		// Expected return
+		ResponseEntity<Meditation> expected = new ResponseEntity<Meditation>(newMed, headers, HttpStatus.CREATED);
+		// Mock
+		when(meditationService.create(createdMed)).thenReturn(newMed);
+		// Actual method
+		ResponseEntity<Meditation> actual = controller.createMeditation(createdMed);
+		// Assert
+		assertThat(expected).isEqualTo(actual);
+		// Verify mock
+		verify(meditationService).create(createdMed);
 
 	}
 
