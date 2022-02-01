@@ -44,6 +44,25 @@ public class Meditation {
 		super();
 	}
 
+	public Meditation(Long id, @NotNull LocalDate date, @NotNull @Length(min = 5) String timeOfDay,
+			@NotNull @Min(1) Integer duration, @NotNull boolean guided) {
+		super();
+		this.id = id;
+		this.date = date;
+		this.timeOfDay = timeOfDay;
+		this.duration = duration;
+		this.guided = guided;
+	}
+
+	public Meditation(@NotNull LocalDate date, @NotNull @Length(min = 5) String timeOfDay,
+			@NotNull @Min(1) Integer duration, @NotNull boolean guided) {
+		super();
+		this.date = date;
+		this.timeOfDay = timeOfDay;
+		this.duration = duration;
+		this.guided = guided;
+	}
+
 	public Long getId() {
 		return id;
 	}
