@@ -59,7 +59,7 @@ public class MeditationService {
 		if (meditationRepository.existsById(id)) {
 			Meditation meditation = meditationRepository.getById(id);
 			meditationRepository.deleteById(id);
-			return meditation; // may not work
+			return meditation; // may not work (does work)
 		}
 		throw new EntityNotFoundException("Meditation with id " + id + " does not exist");
 	}

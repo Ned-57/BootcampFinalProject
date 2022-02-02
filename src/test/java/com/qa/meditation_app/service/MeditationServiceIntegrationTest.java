@@ -29,6 +29,8 @@ public class MeditationServiceIntegrationTest {
 
 	private List<Meditation> medsInDb;
 	private Meditation gotMed;
+	private Meditation newMed;
+	private Long nextNewId;
 
 	@BeforeEach
 	public void init() {
@@ -42,6 +44,10 @@ public class MeditationServiceIntegrationTest {
 		medsInDb.addAll(meditationRepository.saveAll(meds));
 		// Meditation to get by id
 		gotMed = new Meditation(1L, LocalDate.of(2022, 01, 31), "10:52", 10, false);
+		// Meditation to create
+		newMed = new Meditation(LocalDate.of(2022, 02, 03), "06:30", 90, false);
+		// Generates new element id from last element's id
+		nextNewId = medsInDb.get(medsInDb.size() - 1).getId() + 1;
 	}
 
 	@Test
@@ -54,4 +60,25 @@ public class MeditationServiceIntegrationTest {
 		assertThat(gotMed).isEqualTo(meditationService.getById(1L));
 	}
 
+	@Test
+	public void createMeditationTest() {
+		// Expected
+		Meditation expected = new Meditation(nextNewId, newMed.getDate(), newMed.getTimeOfDay(), newMed.getDuration(),
+				newMed.isGuided());
+
+		assertThat(expected).isEqualTo(meditationService.create(newMed));
+	}
+
+	@Test
+	public void updateMeditationTest() {
+		Meditation updatedMed = new Meditation(2L, LocalDate.of(2025, 12, 25), "00:00", 120, true);
+		assertThat(updatedMed).isEqualTo(meditationService.update(updatedMed, 2));
+	}
+
+	@Test
+	public void deleteMeditationTest() {
+		Meditation med = medsInDb.get(1);
+
+		assertThat(meditationService.delete(med.getId())).isEqualTo(med);
+	}
 }
