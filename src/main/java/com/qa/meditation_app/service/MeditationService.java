@@ -24,7 +24,7 @@ public class MeditationService {
 		return meditationRepository.findAll();
 	}
 
-	public Meditation getById(Long id) {
+	public Meditation getById(long id) {
 		if (meditationRepository.existsById(id)) {
 			return meditationRepository.findById(id).get();
 		}

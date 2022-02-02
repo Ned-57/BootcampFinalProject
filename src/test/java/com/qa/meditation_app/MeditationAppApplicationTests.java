@@ -1,4 +1,4 @@
-package com.qa.user_app;
+package com.qa.meditation_app;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

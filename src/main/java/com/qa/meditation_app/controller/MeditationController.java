@@ -21,9 +21,7 @@ import com.qa.meditation_app.data.entity.Meditation;
 import com.qa.meditation_app.service.MeditationService;
 
 @RestController
-
 @RequestMapping(path = "/meditation")
-
 public class MeditationController {
 
 	private MeditationService meditationService;
@@ -39,7 +37,7 @@ public class MeditationController {
 		return meditations;
 	}
 
-	// get by id
+	// Get by id
 	@GetMapping(path = "/{id}")
 	public ResponseEntity<Meditation> getMeditationById(@PathVariable("id") long id) {
 		Meditation savedMeditation = meditationService.getById(id);
@@ -47,6 +45,7 @@ public class MeditationController {
 		return response;
 	}
 
+	// Create
 	@PostMapping
 	public ResponseEntity<Meditation> createMeditation(@Valid @RequestBody Meditation meditation) {
 		Meditation savedMeditation = meditationService.create(meditation);
@@ -64,7 +63,7 @@ public class MeditationController {
 			@Valid @RequestBody Meditation meditation) {
 		Meditation updatedMeditation = meditationService.update(meditation, id);
 		HttpHeaders headers = new HttpHeaders();
-		headers.add("Location", "/user/" + String.valueOf(updatedMeditation.getId()));
+		headers.add("Location", "/meditation/" + String.valueOf(updatedMeditation.getId()));
 		ResponseEntity<Meditation> response = new ResponseEntity<Meditation>(updatedMeditation, headers,
 				HttpStatus.CREATED);
 		return response;
