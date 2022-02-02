@@ -62,7 +62,7 @@ public class MeditationControllerSystemIntegrationTest {
 	public void getAllMeditationsTest() throws Exception {
 		// Mock HTTP request
 		MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.request(HttpMethod.GET, "/meditation");
-		// Set the content type
+		// Set the accept header for the content type
 		mockRequest.accept(MediaType.APPLICATION_JSON);
 		// Create expected JSON String from medsInDb for content matcher
 		String meds = objectMapper.writeValueAsString(medsInDb);
@@ -81,7 +81,7 @@ public class MeditationControllerSystemIntegrationTest {
 		mockRequest.contentType(MediaType.APPLICATION_JSON);
 		// Create expected JSON string from gotMed for content matcher
 		String med = objectMapper.writeValueAsString(gotMed);
-		// Result matchers (comparing mockRequest JSON with gotUser JSON)
+		// Result matchers (comparing mockRequest JSON with gotMed JSON)
 		ResultMatcher statusMatcher = MockMvcResultMatchers.status().isOk();
 		ResultMatcher contentMatcher = MockMvcResultMatchers.content().json(med);
 		// Send the mock request and compare results with result matchers
@@ -91,7 +91,7 @@ public class MeditationControllerSystemIntegrationTest {
 	@Test
 	public void createMeditationTest() throws Exception {
 		// Meditation to create
-		Meditation createdMed = new Meditation(LocalDate.of(2020, 23, 03), "19:00", 35, false);
+		Meditation createdMed = new Meditation(LocalDate.of(2020, 03, 23), "19:00", 35, false);
 		// Meditation to expect
 		Meditation newMed = new Meditation(nextNewId, createdMed.getDate(), createdMed.getTimeOfDay(),
 				createdMed.getDuration(), createdMed.isGuided());
@@ -101,7 +101,15 @@ public class MeditationControllerSystemIntegrationTest {
 		mockRequest.contentType(MediaType.APPLICATION_JSON);
 		// Set content body to send via mock request
 		mockRequest.content(objectMapper.writeValueAsString(createdMed));
-
+		// Set accept header
+		mockRequest.accept(MediaType.APPLICATION_JSON);
+		// Expected JSON String
+		String expected = objectMapper.writeValueAsString(newMed);
+		// Result matchers
+		ResultMatcher statusMatcher = MockMvcResultMatchers.status().isCreated();
+		ResultMatcher contentMatcher = MockMvcResultMatchers.content().json(expected);
+		// Send and compare
+		mockMvc.perform(mockRequest).andExpect(statusMatcher).andExpect(contentMatcher);
 	}
 
 }
