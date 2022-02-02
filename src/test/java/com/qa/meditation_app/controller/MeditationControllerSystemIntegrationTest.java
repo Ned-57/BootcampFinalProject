@@ -64,13 +64,44 @@ public class MeditationControllerSystemIntegrationTest {
 		MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.request(HttpMethod.GET, "/meditation");
 		// Set the content type
 		mockRequest.accept(MediaType.APPLICATION_JSON);
-		// Create expected JSON String from medsInDb
+		// Create expected JSON String from medsInDb for content matcher
 		String meds = objectMapper.writeValueAsString(medsInDb);
 		// Result matchers to compare medsInDb JSON with the result of the mock request
 		ResultMatcher statusMatcher = MockMvcResultMatchers.status().isOk();
 		ResultMatcher contentMatcher = MockMvcResultMatchers.content().json(meds);
 		// Send the mock request and expect back the result matchers
 		mockMvc.perform(mockRequest).andExpect(statusMatcher).andExpect(contentMatcher);
+	}
+
+	@Test
+	public void getMeditationById() throws Exception {
+		// Mock HTTP request
+		MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.request(HttpMethod.GET, "/meditation/1");
+		// Set content type of header for request
+		mockRequest.contentType(MediaType.APPLICATION_JSON);
+		// Create expected JSON string from gotMed for content matcher
+		String med = objectMapper.writeValueAsString(gotMed);
+		// Result matchers (comparing mockRequest JSON with gotUser JSON)
+		ResultMatcher statusMatcher = MockMvcResultMatchers.status().isOk();
+		ResultMatcher contentMatcher = MockMvcResultMatchers.content().json(med);
+		// Send the mock request and compare results with result matchers
+		mockMvc.perform(mockRequest).andExpect(statusMatcher).andExpect(contentMatcher);
+	}
+
+	@Test
+	public void createMeditationTest() throws Exception {
+		// Meditation to create
+		Meditation createdMed = new Meditation(LocalDate.of(2020, 23, 03), "19:00", 35, false);
+		// Meditation to expect
+		Meditation newMed = new Meditation(nextNewId, createdMed.getDate(), createdMed.getTimeOfDay(),
+				createdMed.getDuration(), createdMed.isGuided());
+		// Mock HTTP request
+		MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.request(HttpMethod.POST, "/meditation");
+		// Set content type of mock request
+		mockRequest.contentType(MediaType.APPLICATION_JSON);
+		// Set content body to send via mock request
+		mockRequest.content(objectMapper.writeValueAsString(createdMed));
+
 	}
 
 }
