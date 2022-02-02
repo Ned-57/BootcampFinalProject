@@ -112,4 +112,24 @@ public class MeditationControllerSystemIntegrationTest {
 		mockMvc.perform(mockRequest).andExpect(statusMatcher).andExpect(contentMatcher);
 	}
 
+	@Test
+	public void updateMeditationTest() throws Exception {
+		Meditation updatedMed = new Meditation(1L, LocalDate.of(2020, 03, 23), "19:00", 35, false);
+		Meditation newMed = new Meditation(1L, updatedMed.getDate(), updatedMed.getTimeOfDay(),
+				updatedMed.getDuration(), updatedMed.isGuided());
+
+		MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.request(HttpMethod.PUT, "/meditation/1");
+		mockRequest.contentType(MediaType.APPLICATION_JSON);
+		mockRequest.content(objectMapper.writeValueAsString(updatedMed));
+		mockRequest.accept(MediaType.APPLICATION_JSON);
+
+		String expected = objectMapper.writeValueAsString(newMed);
+
+		ResultMatcher statusMatcher = MockMvcResultMatchers.status().isCreated();
+		ResultMatcher contentMatcher = MockMvcResultMatchers.content().json(expected);
+
+		mockMvc.perform(mockRequest).andExpect(statusMatcher).andExpect(contentMatcher);
+
+	}
+
 }
