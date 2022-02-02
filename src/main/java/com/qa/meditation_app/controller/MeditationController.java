@@ -63,7 +63,7 @@ public class MeditationController {
 			@Valid @RequestBody Meditation meditation) {
 		Meditation updatedMeditation = meditationService.update(meditation, id);
 		HttpHeaders headers = new HttpHeaders();
-		headers.add("Location", "/user/" + String.valueOf(updatedMeditation.getId()));
+		headers.add("Location", "/meditation/" + String.valueOf(updatedMeditation.getId()));
 		ResponseEntity<Meditation> response = new ResponseEntity<Meditation>(updatedMeditation, headers,
 				HttpStatus.CREATED);
 		return response;

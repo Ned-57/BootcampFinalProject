@@ -48,9 +48,9 @@ public class MeditationControllerWebIntegrationTest {
 		// Meditation object to retrieve by id
 		gotMed = new Meditation(LocalDate.of(2022, 02, 02), "14:00", 12, false);
 		// Meditation to be returned upon creation
-		newMed = new Meditation(LocalDate.of(2022, 02, 03), "14:00", 12, false);
+		newMed = new Meditation(LocalDate.of(2022, 02, 03), "07:30", 30, false);
 		// Meditation to be created
-		createdMed = new Meditation(LocalDate.of(2022, 02, 03), "14:00", 12, false);
+		createdMed = new Meditation(LocalDate.of(2022, 02, 03), "07:30", 30, false);
 	}
 
 	@Test
@@ -102,6 +102,33 @@ public class MeditationControllerWebIntegrationTest {
 		assertThat(expected).isEqualTo(actual);
 		// Verify mock
 		verify(meditationService).create(createdMed);
+
+	}
+
+	@Test
+	public void updateMeditationTest() {
+		// Create expected return
+		HttpHeaders headers = new HttpHeaders();
+		headers.add("Location", "/meditation/" + String.valueOf(newMed.getId()));
+		ResponseEntity<Meditation> expected = new ResponseEntity<Meditation>(newMed, headers, HttpStatus.CREATED);
+		// Mock
+		when(meditationService.update(newMed, 1)).thenReturn(newMed);
+		// Actual
+		ResponseEntity<Meditation> actual = controller.updateMeditation(1, newMed);
+		// Assert
+		assertThat(expected).isEqualTo(actual);
+		// Verify
+		verify(meditationService).update(newMed, 1);
+	}
+
+	@Test
+	public void deleteMeditationTest() {
+		// Expected return is a response with no body and an accepted status
+		ResponseEntity<?> expected = ResponseEntity.accepted().build();
+		// Actual response
+		ResponseEntity<?> actual = controller.deleteMeditation(1);
+		// Assertion
+		assertThat(expected).isEqualTo(actual);
 
 	}
 
