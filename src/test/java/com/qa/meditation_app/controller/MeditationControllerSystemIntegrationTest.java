@@ -129,7 +129,24 @@ public class MeditationControllerSystemIntegrationTest {
 		ResultMatcher contentMatcher = MockMvcResultMatchers.content().json(expected);
 
 		mockMvc.perform(mockRequest).andExpect(statusMatcher).andExpect(contentMatcher);
+	}
 
+	@Test
+	public void deleteMeditationTest() throws Exception {
+		// Meditation deletedMed = new Meditation(1L, LocalDate.of(2022, 01, 31),
+		// "10:52", 10, false);
+
+		MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.request(HttpMethod.DELETE, "/meditation/1");
+		mockRequest.contentType(MediaType.APPLICATION_JSON);
+
+		// String expected = objectMapper.writeValueAsString(deletedMed);
+
+		ResultMatcher statusMatcher = MockMvcResultMatchers.status().isAccepted();
+		// ResultMatcher contentMatcher =
+		// MockMvcResultMatchers.content().json(expected);
+
+		mockMvc.perform(mockRequest).andExpect(statusMatcher);
+		// .andExpect(contentMatcher);
 	}
 
 }
