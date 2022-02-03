@@ -8,6 +8,7 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +19,7 @@ import com.qa.meditation_app.data.repository.MeditationRepository;
 
 //Signifies test
 @SpringBootTest
-@Transactional
+//@Transactional
 public class MeditationServiceIntegrationTest {
 
 	@Autowired
@@ -28,9 +29,15 @@ public class MeditationServiceIntegrationTest {
 	private MeditationRepository meditationRepository;
 
 	private List<Meditation> medsInDb;
-	private Meditation gotMed;
-	private Meditation newMed;
+//	private Meditation gotMed;
+//	private Meditation newMed;
 	private Long nextNewId;
+
+	@AfterEach
+	public void teardown() {
+		meditationRepository.deleteAll();
+		medsInDb = null;
+	}
 
 	@BeforeEach
 	public void init() {
@@ -43,11 +50,11 @@ public class MeditationServiceIntegrationTest {
 		// Add the objects to the repository, and to the ArrayList
 		medsInDb.addAll(meditationRepository.saveAll(meds));
 		// Meditation to get by id
-		gotMed = new Meditation(1L, LocalDate.of(2022, 01, 31), "10:52", 10, false);
+		// gotMed = new Meditation(1L, LocalDate.of(2022, 01, 31), "10:52", 10, false);
 		// Meditation to create
-		newMed = new Meditation(LocalDate.of(2022, 02, 03), "06:30", 90, false);
+		// newMed = new Meditation(4L, LocalDate.of(2022, 02, 03), "06:30", 90, false);
 		// Generates new element id from last element's id
-		nextNewId = medsInDb.get(medsInDb.size() - 1).getId() + 1;
+		nextNewId = (medsInDb.get(medsInDb.size() - 1).getId() + 1);
 	}
 
 	@Test
@@ -57,28 +64,34 @@ public class MeditationServiceIntegrationTest {
 
 	@Test
 	public void getMeditationById() {
-		assertThat(gotMed).isEqualTo(meditationService.getById(1L));
+		Meditation medId = medsInDb.get(0);
+		assertThat(medId).isEqualTo(meditationService.getById(medId.getId()));
 	}
 
 	@Test
 	public void createMeditationTest() {
 		// Expected
-		Meditation expected = new Meditation(nextNewId, newMed.getDate(), newMed.getTimeOfDay(), newMed.getDuration(),
-				newMed.isGuided());
+		Meditation expected = new Meditation(nextNewId, LocalDate.of(2022, 02, 03), "06:30", 90, false);
+		Meditation actual = new Meditation(LocalDate.of(2022, 02, 03), "06:30", 90, false);
 
-		assertThat(expected).isEqualTo(meditationService.create(newMed));
+		assertThat(expected).isEqualTo(meditationService.create(actual));
 	}
 
+	@Transactional
 	@Test
 	public void updateMeditationTest() {
-		Meditation updatedMed = new Meditation(2L, LocalDate.of(2025, 12, 25), "00:00", 120, true);
-		assertThat(updatedMed).isEqualTo(meditationService.update(updatedMed, 2));
+		long id = medsInDb.get(0).getId();
+
+		Meditation expected = new Meditation(id, LocalDate.of(2025, 12, 25), "00:00", 120, true);
+		Meditation updatedMedNoId = new Meditation(LocalDate.of(2025, 12, 25), "00:00", 120, true);
+
+		assertThat(expected).isEqualTo(meditationService.update(updatedMedNoId, id));
 	}
 
 	@Test
 	public void deleteMeditationTest() {
 		Meditation med = medsInDb.get(1);
 
-		assertThat(meditationService.delete(med.getId())).isEqualTo(med);
+		assertThat(meditationService.delete(med.getId())).isEqualTo(null);
 	}
 }
