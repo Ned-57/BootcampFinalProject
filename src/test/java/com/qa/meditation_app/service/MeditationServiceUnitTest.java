@@ -91,11 +91,11 @@ public class MeditationServiceUnitTest {
 	@Test
 	public void deleteMeditationTest() {
 		when(meditationRepository.existsById(medId)).thenReturn(true);
-		when(meditationRepository.getById(medId)).thenReturn(medWithId);
+//		when(meditationRepository.getById(medId)).thenReturn(null);
 
-		assertThat(meditationService.delete(medId)).isEqualTo(medWithId);
+		assertThat(meditationService.delete(medId)).isEqualTo(null);
 
 		verify(meditationRepository).existsById(medId);
-		verify(meditationRepository).getById(medId);
+//		verify(meditationRepository).getById(medId);
 	}
 }
