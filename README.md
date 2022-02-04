@@ -95,4 +95,4 @@ Test coverage:
 
 ## Link to Jira Board
 
-https://bootcampnt.atlassian.net/jira/software/projects/BOOT/boards
+https://bootcampnt.atlassian.net/jira/software/projects/BOOT/boards/2
