@@ -29,7 +29,7 @@ be easy, but I had all the resources I could ask for and knew I would be able to
 When I started with my Jira board, creating an Epic and User Stories for the CRUD functionality, it
  went quite well however I did initially forget to write the tasks that had to be done to complete these stories,
  but I later added these to the description of each story. I also didn't consider other epics that needed to be
- created in order to stasify the project specification, but I eventually realised and I created two more,
+ created in order to satisfy the project specification, but I eventually realised and I created two more,
  one for documentation, and one for testing
 with appropriate user stories and acceptance criteria for each.
 
